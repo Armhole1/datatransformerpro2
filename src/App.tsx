@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { FileText, Settings, LayoutDashboard, PlusCircle, Receipt, Landmark, Wrench } from 'lucide-react';
+import { FileText, Settings, LayoutDashboard, PlusCircle, Receipt, Landmark, Wrench, Lock } from 'lucide-react';
 import InvoiceExtractor from './components/InvoiceExtractor';
 import ReceiptScanner from './components/ReceiptScanner';
 import BankStatementParser from './components/BankStatementParser';
 import CustomExtractor from './components/CustomExtractor';
+import PrivateExtractor from './components/PrivateExtractor';
 
-type Module = 'invoice' | 'receipt' | 'bank_statement' | 'custom' | 'coming_soon';
+type Module = 'invoice' | 'receipt' | 'bank_statement' | 'custom' | 'private' | 'coming_soon';
 
 export default function App() {
   const [activeModule, setActiveModule] = useState<Module>('invoice');
@@ -69,6 +70,18 @@ export default function App() {
             <Wrench className="w-5 h-5" />
             Custom Extractor
           </button>
+
+          <button
+            onClick={() => setActiveModule('private')}
+            className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+              activeModule === 'private'
+                ? 'bg-emerald-50 text-emerald-700'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            <Lock className="w-5 h-5" />
+            Private Extractor
+          </button>
           
           <button
             onClick={() => setActiveModule('coming_soon')}
@@ -97,6 +110,7 @@ export default function App() {
         {activeModule === 'receipt' && <ReceiptScanner />}
         {activeModule === 'bank_statement' && <BankStatementParser />}
         {activeModule === 'custom' && <CustomExtractor />}
+        {activeModule === 'private' && <PrivateExtractor />}
         
         {activeModule === 'coming_soon' && (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
