@@ -42,7 +42,7 @@ export interface Template {
 }
 
 // Rule-based parser for structured data using a template
-export function parseTextWithTemplate(text: string, template: Template) {
+export function parseTextWithTemplate(text: string, template: Template): { rawText: string; extractedFields: Record<string, string>; lineItems?: Record<string, string>[] } {
   const extractedFields: Record<string, string> = {};
   
   template.fields.forEach(field => {
