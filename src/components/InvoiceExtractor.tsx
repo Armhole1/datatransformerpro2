@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, Accept } from 'react-dropzone';
 import { FileText, UploadCloud, CheckCircle, AlertCircle, Loader2, X, Download } from 'lucide-react';
 import { extractDocumentData } from '../lib/gemini';
 import { INVOICE_PROMPT, INVOICE_SCHEMA } from '../lib/schemas';
@@ -39,7 +39,7 @@ export default function InvoiceExtractor() {
       'image/png': ['.png'],
     },
     maxSize: 10 * 1024 * 1024, // 10MB
-  });
+  } as any);
 
   const processFile = async (fileObj: ProcessedFile) => {
     setFiles((prev) =>

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, Accept } from 'react-dropzone';
 import { Landmark, UploadCloud, CheckCircle, AlertCircle, Loader2, X, Download } from 'lucide-react';
 import { extractDocumentData } from '../lib/gemini';
 import { BANK_STATEMENT_PROMPT, BANK_STATEMENT_SCHEMA } from '../lib/schemas';
@@ -39,7 +39,7 @@ export default function BankStatementParser() {
       'image/png': ['.png'],
     },
     maxSize: 10 * 1024 * 1024, // 10MB
-  });
+  } as any);
 
   const processFile = async (fileObj: ProcessedFile) => {
     setFiles((prev) =>

@@ -1,8 +1,11 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import Tesseract from 'tesseract.js';
 
-// Configure PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// Configure PDF.js worker using Vite's URL import
+// @ts-ignore
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 export async function extractTextLocally(file: File): Promise<string> {
   if (file.type === 'application/pdf') {
@@ -32,15 +35,24 @@ async function extractTextFromImage(file: File): Promise<string> {
   return result.data.text;
 }
 
-// Simple rule-based parser for structured data
-export function parseTextToStructuredData(text: string) {
-  // This is a placeholder for rule-based parsing logic.
-  // In a real-world scenario, you would use regex or keyword matching here.
+export interface Template {
+  id: string;
+  name: string;
+  fields: { name: string; pattern: string }[];
+}
+
+// Rule-based parser for structured data using a template
+export function parseTextWithTemplate(text: string, template: Template) {
+  const extractedFields: Record<string, string> = {};
+  
+  template.fields.forEach(field => {
+    const regex = new RegExp(field.pattern, 'i');
+    const match = text.match(regex);
+    extractedFields[field.name] = match ? match[1].trim() : 'N/A';
+  });
+
   return {
     rawText: text,
-    extractedFields: {
-      totalAmount: parseFloat(text.match(/total[:\s]*\$?([\d.]+)/i)?.[1] || '0'),
-      date: text.match(/(\d{1,2}\/\d{1,2}\/\d{2,4})/)?.[1] || 'N/A',
-    }
+    extractedFields
   };
 }
