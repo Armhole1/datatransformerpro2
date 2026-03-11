@@ -63,13 +63,13 @@ export default function TemplateGenerator({ onSave }: { onSave: (template: Templ
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-2">
         <Wand2 className="w-6 h-6 text-emerald-600" />
         AI Template Generator
       </h2>
       
-      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm mb-6">
-        <input type="file" onChange={handleFileChange} className="mb-4" />
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-6">
+        <input type="file" onChange={handleFileChange} className="mb-4 text-gray-900 dark:text-gray-100" />
         <button 
           onClick={generateTemplate}
           disabled={!file || loading}
@@ -83,8 +83,8 @@ export default function TemplateGenerator({ onSave }: { onSave: (template: Templ
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {template && (
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="font-semibold mb-4">Generated Template: {template.name}</h3>
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Generated Template: {template.name}</h3>
           <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-sm mb-4">
             {JSON.stringify(template, null, 2)}
           </pre>
