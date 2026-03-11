@@ -9,6 +9,7 @@ export interface DynamicInvoice {
     columns: string[];
     rows: { cells: string[] }[];
   }[];
+  htmlTemplate?: string;
 }
 
 const fileToBase64 = async (file: File): Promise<string> => {
@@ -31,10 +32,10 @@ export const analyzeInvoiceTemplate = async (file: File): Promise<DynamicInvoice
   const base64 = await fileToBase64(file);
 
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: 'gemini-3.1-flash-preview',
     contents: [
       { inlineData: { data: base64, mimeType: file.type } },
-      { text: "Extract the invoice template structure and all visible data. Return a JSON object with 'templateName', 'fields' (array of objects with id, label, value), and 'tables' (array of objects with id, label, columns array, and rows array where each row is an object with a 'cells' array of strings matching the columns length)." }
+      { text: "Extract the invoice template structure and all visible data. Return a JSON object with 'templateName', 'fields' (array of objects with id, label, value), and 'tables' (array of objects with id, label, columns array, and rows array where each row is an object with a 'cells' array of strings matching the columns length). ALSO, provide an 'htmlTemplate' string. This must be a complete HTML snippet (using inline CSS) that EXACTLY replicates the visual layout, colors, fonts, and structure of the uploaded invoice. Use placeholders like {{field_id}} for field values, and a special placeholder {{table_id}} where the table should be injected. For logos, use a placeholder image URL like 'https://via.placeholder.com/150'. Make it look as close to the original as possible." }
     ],
     config: {
       responseMimeType: "application/json",
@@ -42,6 +43,7 @@ export const analyzeInvoiceTemplate = async (file: File): Promise<DynamicInvoice
         type: Type.OBJECT,
         properties: {
           templateName: { type: Type.STRING },
+          htmlTemplate: { type: Type.STRING },
           fields: {
             type: Type.ARRAY,
             items: {

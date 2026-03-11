@@ -82,7 +82,10 @@ export default function PrivateExtractor({ templates, setTemplates }: { template
           reorderFiles={state.reorderFiles}
         />
 
-        <UnifiedWorkflow files={state.files} />
+        <UnifiedWorkflow 
+          files={state.files} 
+          onTransfer={(file) => state.setFiles(prev => [...prev, file])}
+        />
 
         {state.viewingFile && <ViewDetailsModal file={state.viewingFile} onClose={() => state.setViewingFile(null)} />}
         {state.isPreviewOpen && <PreviewModal files={state.files} onClose={() => state.setIsPreviewOpen(false)} />}
